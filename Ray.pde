@@ -15,7 +15,7 @@ class Ray {
     return this.direction;
   }
   
-  PVector pointer_at_parameter(float t) {
+  PVector point_at_parameter(float t) {
     return PVector.add(origin, PVector.mult(direction, t));
   }
   

@@ -1,5 +1,5 @@
 void setup() {
-  size(800, 600, P3D);
+  size(800, 400, P3D); 
 }
 
 
@@ -9,12 +9,17 @@ void draw() {
   PVector vertical = new PVector(0.0, 2.0, 0.0);
   PVector origin = new PVector(0.0, 0.0, 0.0);
   
+  ArrayList<Hitable> list =new ArrayList<Hitable>();
+  list.add(new Sphere(new PVector(0,0,-1), 0.5));
+  list.add(new Sphere(new PVector(0,-100.5,-1), 100));
+  Hitable world = new Hitable_list(list);
+  
   for (int j = height-1; j >= 0; j--) {
     for (int i = 0; i < width; i++) {
       float u = float(i) / float(width);
       float v = float(j) / float(height);
       Ray r = new Ray(origin, PVector.add(PVector.add(PVector.mult(vertical, v), PVector.mult(horizontal, u)), lower_left_corner)); 
-      PVector col = get_color(r);
+      PVector col = get_color(r, world);
       int ir = int(255.99 * col.x);
       int ig = int(255.99 * col.y);
       int ib = int(255.99 * col.z);
@@ -24,18 +29,11 @@ void draw() {
   }
 }
 
-Boolean hit_sphere(PVector center, float radius, Ray r) {
-  PVector oc = PVector.sub(r.origin(), center);
-  float a = PVector.dot(r.direction(), r.direction());
-  float b = 2.0 * PVector.dot(oc, r.direction());
-  float c = PVector.dot(oc, oc) - radius*radius;
-  float discriminant = b*b -4*a*c;
-  return (discriminant > 0);
-}
 
-PVector get_color(Ray r) {
-  if (hit_sphere(new PVector(0,0,-1), 0.5, r)) {
-    return new PVector(1, 0, 0);
+PVector get_color(Ray r, Hitable world) {
+  Hit_record rec = new Hit_record();
+  if (world.hit(r, 0.0, Float.MAX_VALUE, rec)) {
+    return PVector.mult(new PVector(rec.normal.x+1, rec.normal.y+1, rec.normal.z+1), 0.5);
   }
   else {
     PVector unit_dir = r.direction().normalize();
