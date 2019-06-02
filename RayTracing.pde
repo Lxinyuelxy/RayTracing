@@ -24,13 +24,28 @@ void draw() {
   }
 }
 
+Boolean hit_sphere(PVector center, float radius, Ray r) {
+  PVector oc = PVector.sub(r.origin(), center);
+  float a = PVector.dot(r.direction(), r.direction());
+  float b = 2.0 * PVector.dot(oc, r.direction());
+  float c = PVector.dot(oc, oc) - radius*radius;
+  float discriminant = b*b -4*a*c;
+  return (discriminant > 0);
+}
+
 PVector get_color(Ray r) {
-  PVector unit_dir = r.direction().normalize();
-  float t = 0.5*(unit_dir.y + 1.0);
-  
-  PVector white = new PVector(1.0, 1.0, 1.0);
-  PVector light_blue = new PVector(0.5, 0.7, 1.0);
-  return PVector.add(PVector.mult(white, 1.0-t), PVector.mult(light_blue, t));
+  if (hit_sphere(new PVector(0,0,-1), 0.5, r)) {
+    return new PVector(1, 0, 0);
+  }
+  else {
+    PVector unit_dir = r.direction().normalize();
+    float t = 0.5*(unit_dir.y + 1.0);
+    
+    PVector white = new PVector(1.0, 1.0, 1.0);
+    PVector light_blue = new PVector(0.5, 0.7, 1.0);
+    return PVector.add(PVector.mult(white, 1.0-t), PVector.mult(light_blue, t));
+  }
+
 }
   
   
