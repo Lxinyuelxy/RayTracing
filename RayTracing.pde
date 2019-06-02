@@ -4,22 +4,27 @@ void setup() {
 
 
 void draw() {
-  PVector lower_left_corner = new PVector(-2.0, -1.0, -1.0);
-  PVector horizontal = new PVector(4.0, 0.0, 0.0);
-  PVector vertical = new PVector(0.0, 2.0, 0.0);
-  PVector origin = new PVector(0.0, 0.0, 0.0);
+
   
   ArrayList<Hitable> list =new ArrayList<Hitable>();
   list.add(new Sphere(new PVector(0,0,-1), 0.5));
   list.add(new Sphere(new PVector(0,-100.5,-1), 100));
   Hitable world = new Hitable_list(list);
+  int ns = 10;
+  
+  Camera cam = new Camera();
   
   for (int j = height-1; j >= 0; j--) {
     for (int i = 0; i < width; i++) {
-      float u = float(i) / float(width);
-      float v = float(j) / float(height);
-      Ray r = new Ray(origin, PVector.add(PVector.add(PVector.mult(vertical, v), PVector.mult(horizontal, u)), lower_left_corner)); 
-      PVector col = get_color(r, world);
+      
+      PVector col = new PVector(0.0, 0.0, 0.0);
+      for (int s = 0; s < ns; s++) {
+        float u = (i + random(0.0, 1.0)) / float(width);
+        float v = (j + random(0.0, 1.0)) / float(height);
+        Ray r = cam.get_ray(u, v);
+        col.add(get_color(r, world));
+      }
+      col.div(ns);
       int ir = int(255.99 * col.x);
       int ig = int(255.99 * col.y);
       int ib = int(255.99 * col.z);
