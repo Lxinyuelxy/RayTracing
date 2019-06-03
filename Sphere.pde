@@ -12,10 +12,6 @@ class Hit_record {
   }
 }
 
-//interface Hitable {
-//  Hit_record hit(Ray r, float t_min, float t_max);
-//}
-
 class Sphere {
   PVector center;
   float radius;

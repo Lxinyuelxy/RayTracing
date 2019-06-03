@@ -3,7 +3,7 @@ void setup() {
   Scene scene = createScene();
   Camera cam = new Camera();
   
-  int ns = 30;
+  int ns = 10;
   for (int j = height-1; j >= 0; j--) {
     for (int i = 0; i < width; i++) {
       
