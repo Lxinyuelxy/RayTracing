@@ -2,24 +2,33 @@ class Hit_record {
   float t;
   PVector p;
   PVector normal;
-  Material mat;
+  Material material;
+  
+  Hit_record (float _t, PVector _p, PVector _normal, Material _material) {
+    this.t = _t;
+    this.p = _p;
+    this.normal = _normal;
+    this.material = _material;
+  }
 }
 
-interface Hitable {
-  Boolean hit (Ray r, float t_min, float t_max, Hit_record rec);
-}
+//interface Hitable {
+//  Hit_record hit(Ray r, float t_min, float t_max);
+//}
 
-class Sphere implements Hitable{
+class Sphere {
   PVector center;
   float radius;
+  Material material;
   
   Sphere() {}
-  Sphere(PVector cen, float r) {
+  Sphere(PVector cen, float r, Material m) {
     this.center = cen;
     this.radius = r;
+    this.material = m;
   }
   
-  Boolean hit (Ray r, float t_min, float t_max, Hit_record rec) {
+  Hit_record hit (Ray r, float t_min, float t_max) {
     PVector oc = PVector.sub(r.origin(), center);
     float a = PVector.dot(r.direction(), r.direction());
     float b = PVector.dot(oc, r.direction());
@@ -29,45 +38,24 @@ class Sphere implements Hitable{
     if (discriminant > 0) {
       float temp = (-b - sqrt(discriminant)) / a;
       if (temp < t_max && temp > t_min) {
-        rec.t = temp;
-        rec.p = r.point_at_parameter(rec.t);
-        rec.normal = PVector.div(PVector.sub(rec.p, center), radius);
-        return true;
+        
+        
+        float t = temp;
+        PVector p = r.point_at_parameter(t);
+        PVector normal = PVector.div(PVector.sub(p, center), radius);
+ 
+        return new Hit_record(t, p,  normal, this.material);
       }
       temp = (-b + sqrt(discriminant)) / a;
       if (temp < t_max && temp > t_min) {
-        rec.t = temp;
-        rec.p = r.point_at_parameter(rec.t);
-        rec.normal = PVector.div(PVector.sub(rec.p, center), radius);
-        return true;
+        
+        float t = temp;
+        PVector p = r.point_at_parameter(t);
+        PVector normal = PVector.div(PVector.sub(p, center), radius);
+ 
+        return new Hit_record(t, p,  normal, this.material);
       }
     }
-    return false;
-  }
-}
-
-class Hitable_list implements Hitable {
-  ArrayList<Hitable> list;
-  int list_size;
-  
-  Hitable_list(ArrayList<Hitable> _list) {
-    this.list = _list;
-  }
-  
-  Boolean hit (Ray r, float t_min, float t_max, Hit_record rec) {
-    Hit_record temp_rec = new Hit_record();
-    Boolean hit_anything = false;
-    float closest_so_far = t_max;
-    
-    for (int i = 0; i < list.size(); i++) {
-      if (list.get(i).hit(r, t_min, closest_so_far, temp_rec)) {
-        hit_anything = true;
-        closest_so_far = temp_rec.t;
-        rec.t = temp_rec.t;
-        rec.p = temp_rec.p.copy();
-        rec.normal = temp_rec.normal.copy();
-      }
-    }
-    return hit_anything;
+    return null;
   }
 }

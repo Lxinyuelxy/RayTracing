@@ -2,6 +2,8 @@ class Ray {
   PVector origin;
   PVector direction;
   
+  Ray() {};
+  
   Ray(PVector a, PVector b) {
     this.origin = a;
     this.direction = b;
