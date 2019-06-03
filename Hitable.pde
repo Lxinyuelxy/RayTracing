@@ -2,6 +2,7 @@ class Hit_record {
   float t;
   PVector p;
   PVector normal;
+  Material mat;
 }
 
 interface Hitable {
@@ -62,9 +63,6 @@ class Hitable_list implements Hitable {
       if (list.get(i).hit(r, t_min, closest_so_far, temp_rec)) {
         hit_anything = true;
         closest_so_far = temp_rec.t;
-        //println("temp_rec.t: ", temp_rec.t);
-        //println("temp_rec.p: ", temp_rec.p);
-        //println("temp_rec.normal: ", temp_rec.normal);
         rec.t = temp_rec.t;
         rec.p = temp_rec.p.copy();
         rec.normal = temp_rec.normal.copy();
