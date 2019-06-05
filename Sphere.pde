@@ -40,7 +40,7 @@ class Sphere {
         PVector p = r.point_at_parameter(t);
         PVector normal = PVector.div(PVector.sub(p, center), radius);
  
-        return new Hit_record(t, p,  normal, this.material);
+        return new Hit_record(t, p, normal, this.material);
       }
       temp = (-b + sqrt(discriminant)) / a;
       if (temp < t_max && temp > t_min) {
@@ -49,7 +49,7 @@ class Sphere {
         PVector p = r.point_at_parameter(t);
         PVector normal = PVector.div(PVector.sub(p, center), radius);
  
-        return new Hit_record(t, p,  normal, this.material);
+        return new Hit_record(t, p, normal, this.material);
       }
     }
     return null;
