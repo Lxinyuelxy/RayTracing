@@ -3,7 +3,12 @@ void setup() {
   Scene scene = createScene();
   //Camera cam = new Camera();
   //Camera cam = new Camera(90, float(width) / float(height));
-  Camera cam = new Camera(new PVector(-2, 2, 1), new PVector(0, 0, -1), new PVector(0, 1, 0), 90, float(width) / float(height));
+  //Camera cam = new Camera(new PVector(-2, 2, 1), new PVector(0, 0, -1), new PVector(0, 1, 0), 90, float(width) / float(height));
+  PVector lookfrom = new PVector(3, 3, 2);
+  PVector lookat = new PVector(0, 0, -1);
+  float dist_to_focus = PVector.sub(lookfrom, lookat).mag();
+  float aperture = 2.0;
+  Camera cam = new Camera(lookfrom, lookat, new PVector(0, 1, 0), 20, float(width) / float(height), aperture, dist_to_focus);
   
   int ns = 10;
   for (int j = height-1; j >= 0; j--) {
@@ -13,7 +18,7 @@ void setup() {
       for (int s = 0; s < ns; s++) {
         float u = (i + random(0.0, 1.0)) / float(width);
         float v = (j + random(0.0, 1.0)) / float(height);
-        Ray r = cam.get_ray(u, v);
+        Ray r = cam.get_ray1(u, v);
         col.add(scene.get_color(r, 0));
       }
       col.div(ns);
