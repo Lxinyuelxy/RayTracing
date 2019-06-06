@@ -23,10 +23,10 @@ class Metal extends Material {
   PVector albedo;
   float fuzz;
   
-  Metal(PVector a) {this.albedo = a;}
+  //Metal(PVector a) {this.albedo = a;}
   
   Metal (PVector a, float f) {
-    this(a);
+    this.albedo = a;
     if (f < 1) this.fuzz = f;
     else this.fuzz = 1;
   }

@@ -1,13 +1,11 @@
 void setup() {
-  size(800, 400, P3D); 
+  size(600, 400, P3D); 
   Scene scene = createScene();
-  //Camera cam = new Camera();
-  //Camera cam = new Camera(90, float(width) / float(height));
-  //Camera cam = new Camera(new PVector(-2, 2, 1), new PVector(0, 0, -1), new PVector(0, 1, 0), 90, float(width) / float(height));
-  PVector lookfrom = new PVector(3, 3, 2);
-  PVector lookat = new PVector(0, 0, -1);
-  float dist_to_focus = PVector.sub(lookfrom, lookat).mag();
-  float aperture = 2.0;
+  
+  PVector lookfrom = new PVector(13, 2, 3);
+  PVector lookat = new PVector(0, 0, 0);
+  float dist_to_focus = 10;
+  float aperture = 0.1;
   Camera cam = new Camera(lookfrom, lookat, new PVector(0, 1, 0), 20, float(width) / float(height), aperture, dist_to_focus);
   
   int ns = 10;
@@ -18,7 +16,7 @@ void setup() {
       for (int s = 0; s < ns; s++) {
         float u = (i + random(0.0, 1.0)) / float(width);
         float v = (j + random(0.0, 1.0)) / float(height);
-        Ray r = cam.get_ray1(u, v);
+        Ray r = cam.get_ray(u, v);
         col.add(scene.get_color(r, 0));
       }
       col.div(ns);
@@ -38,11 +36,25 @@ void draw() {}
 Scene createScene() {
   float R = cos(PI / 4.0);
   ArrayList<Sphere> list =new ArrayList<Sphere>();
-  list.add(new Sphere(new PVector(0, 0, -1), 0.5, new Lambertian(new PVector(0.1, 0.2, 0.5))));
-  list.add(new Sphere(new PVector(1, 0, -1), 0.5, new Metal(new PVector(0.8, 0.6, 0.2), 0.3)));
-  list.add(new Sphere(new PVector(-1, 0, -1), 0.5, new Dielectric(1.5)));
-  list.add(new Sphere(new PVector(-1, 0, -1), -0.45, new Dielectric(1.5)));
-  list.add(new Sphere(new PVector(0, -100.5, -1), 100, new Lambertian(new PVector(0.8, 0.8, 0.0))));
+  list.add(new Sphere(new PVector(0, -1000, 0), 1000, new Lambertian(new PVector(0.5, 0.5, 0.5))));
+  
+  for (int a = -11; a < 11; a++) {
+    for (int b = -11; b < 11; b++) {
+      float choose_mat = random(1.0);
+      PVector center = new PVector(a+0.9*random(1.0), 0.2, b+0.9*random(1.0));
+      if (PVector.sub(center, new PVector(4, 0.2, 0)).mag() > 0.9) {
+        if (choose_mat < 0.8)
+          list.add(new Sphere(center, 0.2, new Lambertian(new PVector(random(1.0)*random(1.0), random(1.0)*random(1.0), random(1.0)*random(1.0)))));
+        else if (choose_mat < 0.95)
+          list.add(new Sphere(center, 0.2, new Metal(new PVector(0.5*(1+random(1.0)), 0.5*(1+random(1.0)), 0.5*(1+random(1.0))), 0.5*random(1.0))));
+        else
+           list.add(new Sphere(center, 0.2, new Dielectric(1.5)));
+      }
+    }
+  }
+  list.add(new Sphere(new PVector(0, 1, 0), 1.0, new Dielectric(1.5)));
+  list.add(new Sphere(new PVector(-4, 1, 0), 1.0, new Lambertian(new PVector(0.4, 0.2, 0.1))));
+  list.add(new Sphere(new PVector(4, 1, 0), 1.0, new Metal(new PVector(0.7, 0.6, 0.5), 0.0)));
   return new Scene(list);
 }
 
