@@ -52,8 +52,8 @@ Scene createScene() {
   ArrayList<Sphere> list =new ArrayList<Sphere>();
   list.add(new Sphere(new PVector(0, -1000, 0), 1000, new Lambertian(new PVector(0.5, 0.5, 0.5))));
   
-  for (int a = -11; a < 11; a += 2) {
-    for (int b = -11; b < 11; b += 2) {
+  for (int a = -11; a < 11; a++) {
+    for (int b = -11; b < 11; b++) {
       float choose_mat = random(1.0);
       PVector center = new PVector(a+random(5.0), 0.2, b+random(5.0));
       if (PVector.sub(center, new PVector(4, 0.2, 0)).mag() > 0.9) {
