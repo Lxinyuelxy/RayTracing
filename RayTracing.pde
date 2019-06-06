@@ -1,4 +1,5 @@
 void setup() {
+  float startTime = millis();
   size(600, 400, P3D); 
   Scene scene = createScene();
   
@@ -8,7 +9,8 @@ void setup() {
   float aperture = 0.1;
   Camera cam = new Camera(lookfrom, lookat, new PVector(0, 1, 0), 20, float(width) / float(height), aperture, dist_to_focus);
   
-  int ns = 10;
+  int ns = 50;
+  int lastPercent = -1;
   for (int j = height-1; j >= 0; j--) {
     for (int i = 0; i < width; i++) {
       
@@ -27,7 +29,19 @@ void setup() {
       
       set(i, height-j, color(ir, ig, ib));
     }
+    
+    
+    int percent = int((1.0 - j*1.0 / (height-1)) * 100);
+    if (lastPercent < percent) {
+      lastPercent = percent;
+      println("Rendering percent: ", percent);
+    }
+    
   }
+  
+  float endTime = millis();
+  println("---------------");
+  println("Rendering Time: ", (endTime - startTime) / 1000.0);
 }
 
 void draw() {}
@@ -38,10 +52,10 @@ Scene createScene() {
   ArrayList<Sphere> list =new ArrayList<Sphere>();
   list.add(new Sphere(new PVector(0, -1000, 0), 1000, new Lambertian(new PVector(0.5, 0.5, 0.5))));
   
-  for (int a = -11; a < 11; a++) {
-    for (int b = -11; b < 11; b++) {
+  for (int a = -11; a < 11; a += 2) {
+    for (int b = -11; b < 11; b += 2) {
       float choose_mat = random(1.0);
-      PVector center = new PVector(a+0.9*random(1.0), 0.2, b+0.9*random(1.0));
+      PVector center = new PVector(a+random(5.0), 0.2, b+random(5.0));
       if (PVector.sub(center, new PVector(4, 0.2, 0)).mag() > 0.9) {
         if (choose_mat < 0.8)
           list.add(new Sphere(center, 0.2, new Lambertian(new PVector(random(1.0)*random(1.0), random(1.0)*random(1.0), random(1.0)*random(1.0)))));
@@ -55,6 +69,7 @@ Scene createScene() {
   list.add(new Sphere(new PVector(0, 1, 0), 1.0, new Dielectric(1.5)));
   list.add(new Sphere(new PVector(-4, 1, 0), 1.0, new Lambertian(new PVector(0.4, 0.2, 0.1))));
   list.add(new Sphere(new PVector(4, 1, 0), 1.0, new Metal(new PVector(0.7, 0.6, 0.5), 0.0)));
+  println("Rendering objects num: ", list.size());
   return new Scene(list);
 }
 
