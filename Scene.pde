@@ -1,15 +1,15 @@
 class Scene {
   
-  ArrayList<Sphere> scene;
+  ArrayList<Sphere> objects;
   Scene(ArrayList<Sphere> list) {
-    this.scene = list;
+    this.objects = list;
   }
   
   Hit_record hit(Ray r, float t_min, float t_max) {
     float closest_so_far = t_max;
     Hit_record rec = null;
     
-    for (Sphere sphere : scene) {
+    for (Sphere sphere : objects) {
       Hit_record temp_rec = sphere.hit(r, t_min, closest_so_far);
       
       if (temp_rec != null) {
