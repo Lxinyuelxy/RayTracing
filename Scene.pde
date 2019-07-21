@@ -49,7 +49,7 @@ class Scene {
       PVector white = new PVector(1.0, 1.0, 1.0);
       PVector light_blue = new PVector(0.5, 0.7, 1.0);
       return PVector.add(PVector.mult(white, 1.0-t), PVector.mult(light_blue, t));
-    }
-  
+    } 
   }
+  
 }
